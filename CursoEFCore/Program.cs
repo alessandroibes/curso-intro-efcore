@@ -16,7 +16,52 @@ namespace CursoEFCore
             //InserirDadosEmMassa2();
             //ConsultarDados();
             //CadastrarPedido();
-            ConsultarPedidoCarregamentoAdiantado();
+            //ConsultarPedidoCarregamentoAdiantado();
+            //AtualizarDados();
+            //AtualizarDadosDesconectado();
+            AtualizarDadosDesconectado2();
+        }
+
+        private static void AtualizarDadosDesconectado2()
+        {
+            using var db = new Data.ApplicationContext();
+            var cliente = new Cliente
+            {
+                Id = 1
+            };
+            
+            var clienteDesconectado = new
+            {
+                Nome = "Cliente Desconectado Passo 2",
+                Telefone = "666666666"
+            };
+
+            db.Attach(cliente); // Começa a rastrear o objeto
+            db.Entry(cliente).CurrentValues.SetValues(clienteDesconectado);
+            db.SaveChanges();
+        }
+        private static void AtualizarDadosDesconectado()
+        {
+            using var db = new Data.ApplicationContext();
+            var cliente = db.Clientes.Find(1);
+            var clienteDesconectado = new
+            {
+                Nome = "Cliente Desconectado",
+                Telefone = "555555555"
+            };
+
+            db.Entry(cliente).CurrentValues.SetValues(clienteDesconectado);
+            db.SaveChanges();
+        }
+
+        private static void AtualizarDados()
+        {
+            using var db = new Data.ApplicationContext();
+            var cliente = db.Clientes.Find(1);
+            cliente.Nome = "Cliente Alterado Passo 2";
+
+            //db.Clientes.Update(cliente); // Isso irá indicar que eu estou alterando todos os dados do cliente, o que não é verdade
+            db.SaveChanges();
         }
 
         private static void ConsultarPedidoCarregamentoAdiantado()
