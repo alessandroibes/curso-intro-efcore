@@ -1,3 +1,4 @@
+using System.Linq;
 using CursoEFCore.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -24,6 +25,25 @@ namespace CursoEFCore.Data
         {
             // Aplica as configurações de todas as classes que implementam IEntityTypeConfiguration no Assembly
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
+            MapearPropriedadesEsquecidas(modelBuilder);
+        }
+
+        private void MapearPropriedadesEsquecidas(ModelBuilder modelBuilder)
+        {
+            foreach(var entity in modelBuilder.Model.GetEntityTypes())
+            {
+                var properties = entity.GetProperties().Where(p => p.ClrType == typeof(string));
+
+                foreach(var property in properties)
+                {
+                    if (string.IsNullOrEmpty(property.GetColumnType())
+                        && !property.GetMaxLength().HasValue)
+                    {
+                        //property.SetMaxLength(100);                        
+                        property.SetColumnType("VARCHAR(100)");
+                    }
+                }
+            }
         }
     }
 }
