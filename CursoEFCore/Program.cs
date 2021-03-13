@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using CursoEFCore.Domain;
 using CursoEFCore.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,27 @@ namespace CursoEFCore
 
             //InserirDadosEmMassa();
 
-            InserirDadosEmMassa2();
+            //InserirDadosEmMassa2();
+
+            ConsultarDados();
+        }
+
+        private static void ConsultarDados()
+        {
+            using var db = new Data.ApplicationContext();
+            //var consultaPorSintaxe = (from c in db.Clientes where c.Id > 0 select c).ToList();
+            var consultaPorMetodo = db.Clientes.AsNoTracking().Where(p => p.Id > 0).ToList();
+            foreach (var cliente in consultaPorMetodo)
+            {
+                Console.WriteLine($"Consultando Cliente: {cliente.Id}");
+
+                // Busca os dados na memória, mas se for usado AsNoTracking() ao trazer os dados, 
+                // o método Find() irá buscar na base de dados e não na memória. 
+                // Esse é o único método que busca os dados em memória.
+                db.Clientes.Find(cliente.Id);
+
+                //db.Clientes.FirstOrDefault(p => p.Id == cliente.Id); // Sempre busca os dados na base de dados
+            }
         }
 
         private static void InserirDadosEmMassa2()
