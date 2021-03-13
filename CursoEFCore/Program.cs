@@ -19,7 +19,33 @@ namespace CursoEFCore
             //ConsultarPedidoCarregamentoAdiantado();
             //AtualizarDados();
             //AtualizarDadosDesconectado();
-            AtualizarDadosDesconectado2();
+            //AtualizarDadosDesconectado2();
+            //RemoverRegistro();
+            RemoverRegistroDesconectado();
+        }
+
+        private static void RemoverRegistroDesconectado()
+        {
+            using var db = new Data.ApplicationContext();
+            var cliente = new Cliente() { Id = 3 };
+
+            db.Clientes.Remove(cliente);
+            //db.Remove(cliente);
+            //db.Entry(cliente).State = EntityState.Deleted;
+
+            db.SaveChanges();
+        }
+
+        private static void RemoverRegistro()
+        {
+            using var db = new Data.ApplicationContext();
+            var cliente = db.Clientes.Find(2);
+
+            db.Clientes.Remove(cliente);
+            //db.Remove(cliente);
+            //db.Entry(cliente).State = EntityState.Deleted;
+
+            db.SaveChanges();
         }
 
         private static void AtualizarDadosDesconectado2()
@@ -40,6 +66,7 @@ namespace CursoEFCore
             db.Entry(cliente).CurrentValues.SetValues(clienteDesconectado);
             db.SaveChanges();
         }
+
         private static void AtualizarDadosDesconectado()
         {
             using var db = new Data.ApplicationContext();
